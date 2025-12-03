@@ -253,13 +253,10 @@
     const tbody = document.querySelector("#tabla-rifas tbody");
     const selectedNumbersEl = document.getElementById("selectedNumbers");
     const apartarBtn = document.getElementById("apartarBtn");
-    const tableContainer = document.getElementById("tableContainer");
-    const sentinel = document.getElementById("sentinel");
 
     let selectedNumbers = [];
     let currentNumber = 0;
-    const initialLoad = 50;   // 🔑 reducido para que cargue rápido en móvil
-    const batchSize = 200;    // 🔑 lotes más pequeños
+    const batchSize = 200;    // cuántos números se generan por bloque
     const maxNumber = 9998;
 
     function appendNumbers(count) {
@@ -288,7 +285,10 @@
       tbody.appendChild(fragment);
     }
 
-    appendNumbers(initialLoad);
+    // 🔑 Genera los primeros 200 números al cargar
+    appendNumbers(batchSize);
 
-    let loading = false;
-    const
+    // 🔑 Botón para cargar más números
+    const loadMoreBtn = document.createElement("button");
+    loadMoreBtn.textContent = "Cargar más números";
+    loadMoreBtn.style.margin = "
