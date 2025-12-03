@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <!-- 🔑 Esto hace que la página se adapte al ancho del celular -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RIFAS EL DELIRIO</title>
   <style>
@@ -80,7 +79,7 @@
       height: 450px;
       margin: 0 auto 20px auto;
       overflow-y: auto;
-      overflow-x: auto; /* 🔑 Permite scroll horizontal en móviles */
+      overflow-x: auto;
       border: 1px solid #444;
       background: #1c1c1c;
       border-radius: 8px;
@@ -149,7 +148,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      width: 90%;          /* 🔑 Botón más ancho en móvil */
+      width: 90%;
       max-width: 300px;
       justify-content: center;
     }
@@ -188,12 +187,10 @@
       -webkit-text-fill-color: transparent;
     }
 
-    /* Sentinela invisible al final para disparar más carga */
     .sentinel {
       height: 1px;
     }
 
-    /* 🔑 Media queries para móviles */
     @media (max-width: 768px) {
       .image-gallery {
         grid-template-columns: repeat(2, 1fr);
@@ -239,7 +236,6 @@
       </thead>
       <tbody></tbody>
     </table>
-    <!-- Sentinela para carga progresiva -->
     <div id="sentinel" class="sentinel"></div>
   </div>
 
@@ -261,12 +257,11 @@
     const sentinel = document.getElementById("sentinel");
 
     let selectedNumbers = [];
-    let currentNumber = 0;       // empieza en 00000
-    const initialLoad = 5000;    // primeros 5000 números
-    const batchSize = 500;       // luego cargas de 500
-    const maxNumber = 9998;      // último número 09998
+    let currentNumber = 0;
+    const initialLoad = 50;   // 🔑 reducido para que cargue rápido en móvil
+    const batchSize = 200;    // 🔑 lotes más pequeños
+    const maxNumber = 9998;
 
-    // Crea celdas y filas en lotes
     function appendNumbers(count) {
       const fragment = document.createDocumentFragment();
       let fila = null;
@@ -279,4 +274,21 @@
 
         const celda = document.createElement("td");
         const num = String(currentNumber).padStart(5, "0");
-        celda.text
+        celda.textContent = num;
+
+        celda.addEventListener("click", () => {
+          selectedNumbers.push(num);
+          selectedNumbersEl.textContent = selectedNumbers.join(", ");
+          celda.remove();
+        });
+
+        fila.appendChild(celda);
+      }
+
+      tbody.appendChild(fragment);
+    }
+
+    appendNumbers(initialLoad);
+
+    let loading = false;
+    const
