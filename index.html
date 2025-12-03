@@ -75,7 +75,7 @@
     }
 
     .table-container {
-      width: 85%;
+      width: 95%;
       height: 450px;
       margin: 0 auto 20px auto;
       overflow-y: auto;
@@ -96,7 +96,7 @@
 
     th, td {
       border: 1px solid #333;
-      padding: 12px;
+      padding: 8px;
       text-align: center;
       cursor: pointer;
       transition: 0.3s;
@@ -186,29 +186,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-
-    .sentinel {
-      height: 1px;
-    }
-
-    @media (max-width: 768px) {
-      .image-gallery {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 480px) {
-      .image-gallery {
-        grid-template-columns: 1fr;
-      }
-      h2 {
-        font-size: 1.2em;
-      }
-      th, td {
-        padding: 8px;
-        font-size: 0.8em;
-      }
-    }
   </style>
 </head>
 <body>
@@ -236,7 +213,6 @@
       </thead>
       <tbody></tbody>
     </table>
-    <div id="sentinel" class="sentinel"></div>
   </div>
 
   <div class="selected-container">
@@ -256,8 +232,7 @@
 
     let selectedNumbers = [];
     let currentNumber = 0;
-    const batchSize = 200;    // cuántos números se generan por bloque
-    const maxNumber = 9998;
+    const maxNumber = 9999; // último número 09999
 
     function appendNumbers(count) {
       const fragment = document.createDocumentFragment();
@@ -285,10 +260,20 @@
       tbody.appendChild(fragment);
     }
 
-    // 🔑 Genera los primeros 200 números al cargar
-    appendNumbers(batchSize);
+    // 🔑 Genera todos los números de golpe (10000)
+    appendNumbers(10000);
 
-    // 🔑 Botón para cargar más números
-    const loadMoreBtn = document.createElement("button");
-    loadMoreBtn.textContent = "Cargar más números";
-    loadMoreBtn.style.margin = "
+    // Botón Apartar → WhatsApp
+    apartarBtn.addEventListener("click", () => {
+      if (selectedNumbers.length === 0) {
+        alert("Por favor selecciona al menos un número.");
+        return;
+      }
+      const mensaje = `Hola, quiero apartar los siguientes números: ${selectedNumbers.join(", ")}`;
+      const telefono = "5218714592770"; // EDITA AQUÍ TU NÚMERO
+      const url = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, "_blank");
+    });
+  </script>
+</body>
+</html>
