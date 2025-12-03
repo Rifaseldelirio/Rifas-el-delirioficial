@@ -2,6 +2,8 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <!-- 🔑 Esto hace que la página se adapte al ancho del celular -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RIFAS EL DELIRIO</title>
   <style>
     body {
@@ -78,6 +80,7 @@
       height: 450px;
       margin: 0 auto 20px auto;
       overflow-y: auto;
+      overflow-x: auto; /* 🔑 Permite scroll horizontal en móviles */
       border: 1px solid #444;
       background: #1c1c1c;
       border-radius: 8px;
@@ -146,6 +149,9 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      width: 90%;          /* 🔑 Botón más ancho en móvil */
+      max-width: 300px;
+      justify-content: center;
     }
 
     #apartarBtn:hover {
@@ -185,6 +191,26 @@
     /* Sentinela invisible al final para disparar más carga */
     .sentinel {
       height: 1px;
+    }
+
+    /* 🔑 Media queries para móviles */
+    @media (max-width: 768px) {
+      .image-gallery {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .image-gallery {
+        grid-template-columns: 1fr;
+      }
+      h2 {
+        font-size: 1.2em;
+      }
+      th, td {
+        padding: 8px;
+        font-size: 0.8em;
+      }
     }
   </style>
 </head>
@@ -242,12 +268,10 @@
 
     // Crea celdas y filas en lotes
     function appendNumbers(count) {
-      // Usamos DocumentFragment para rendimiento
       const fragment = document.createDocumentFragment();
       let fila = null;
 
       for (let i = 0; i < count && currentNumber <= maxNumber; i++, currentNumber++) {
-        // Nueva fila cada 7
         if (currentNumber % 7 === 0) {
           fila = document.createElement("tr");
           fragment.appendChild(fila);
@@ -255,58 +279,4 @@
 
         const celda = document.createElement("td");
         const num = String(currentNumber).padStart(5, "0");
-        celda.textContent = num;
-
-        celda.addEventListener("click", () => {
-          selectedNumbers.push(num);
-          selectedNumbersEl.textContent = selectedNumbers.join(", ");
-          celda.remove();
-        });
-
-        fila.appendChild(celda);
-      }
-
-      tbody.appendChild(fragment);
-    }
-
-    // Carga inicial de 5000
-    appendNumbers(initialLoad);
-
-    // IntersectionObserver para carga progresiva confiable
-    let loading = false;
-    const observer = new IntersectionObserver((entries) => {
-      const entry = entries[0];
-      if (entry.isIntersecting && !loading && currentNumber <= maxNumber) {
-        loading = true;
-        // Pequeño timeout para ceder el hilo y evitar bloqueos largos
-        setTimeout(() => {
-          appendNumbers(batchSize);
-          loading = false;
-          // Si ya llegamos al final, dejar de observar
-          if (currentNumber > maxNumber) {
-            observer.unobserve(sentinel);
-          }
-        }, 0);
-      }
-    }, {
-      root: tableContainer,
-      rootMargin: "0px 0px 200px 0px", // dispara antes de tocar fondo
-      threshold: 0
-    });
-
-    observer.observe(sentinel);
-
-    // Botón Apartar → WhatsApp
-    apartarBtn.addEventListener("click", () => {
-      if (selectedNumbers.length === 0) {
-        alert("Por favor selecciona al menos un número.");
-        return;
-      }
-      const mensaje = `Hola, quiero apartar los siguientes números: ${selectedNumbers.join(", ")}`;
-      const telefono = "5218714592770"; // EDITA AQUÍ TU NÚMERO
-      const url = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
-      window.open(url, "_blank");
-    });
-  </script>
-</body>
-</html>
+        celda.text
